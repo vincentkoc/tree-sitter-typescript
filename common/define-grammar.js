@@ -7,6 +7,7 @@ module.exports = function defineGrammar(dialect) {
     externals: ($, previous) => previous.concat([
       $._function_signature_automatic_semicolon,
       $.__error_recovery,
+      $._instantiation_expression_end,
     ]),
 
     supertypes: ($, previous) => previous.concat([
@@ -15,6 +16,7 @@ module.exports = function defineGrammar(dialect) {
     ]),
 
     precedences: ($, previous) => previous.concat([
+      ['bare_await_postfix', $.expression],
       [
         'type_query_call',
         'call',
@@ -70,6 +72,7 @@ module.exports = function defineGrammar(dialect) {
     ]),
 
     conflicts: ($, previous) => previous.concat([
+      [$.primary_expression, $.await_expression],
       [$.call_expression, $.instantiation_expression, $.binary_expression],
       [$.call_expression, $.instantiation_expression, $.binary_expression, $.unary_expression],
       [$.call_expression, $.instantiation_expression, $.binary_expression, $.update_expression],
@@ -132,9 +135,22 @@ module.exports = function defineGrammar(dialect) {
       .concat([
         $._type_identifier,
         $._jsx_start_opening_element,
+        $._postfix_operand,
       ]),
 
     rules: {
+      // Prefer an awaited postfix operand; a bare await used by a later postfix
+      // receives a larger penalty below, so consuming only a prefix cannot win.
+      await_expression: $ => prec('unary_void', seq(
+        'await',
+        choice(prec.dynamic(1, choice(
+          $.call_expression,
+          $.member_expression,
+          $.subscript_expression,
+          $.update_expression,
+        )), $.expression),
+      )),
+
       public_field_definition: $ => seq(
         repeat(field('decorator', $.decorator)),
         optional(choice(
@@ -174,9 +190,44 @@ module.exports = function defineGrammar(dialect) {
         field('body', $.statement_block),
       ),
 
+      _postfix_operand: $ => choice(
+        $.expression,
+        prec.dynamic(-2, prec('bare_await_postfix', $.await_expression)),
+      ),
+
+      // Keep comparisons available without first reducing a bare await to
+      // expression; the postfix alternative has a higher static precedence.
+      binary_expression: ($, previous) => choice(
+        previous,
+        prec.left('binary_relation', seq(
+          field('left', $.await_expression),
+          field('operator', '<'),
+          field('right', $.expression),
+        )),
+      ),
+
+      member_expression: $ => prec('member', seq(
+        field('object', choice($._postfix_operand, $.primary_expression, $.import)),
+        choice('.', field('optional_chain', $.optional_chain)),
+        field('property', choice(
+          $.private_property_identifier,
+          alias($.identifier, $.property_identifier))),
+      )),
+
+      subscript_expression: $ => prec.right('member', seq(
+        field('object', choice($._postfix_operand, $.primary_expression)),
+        optional(field('optional_chain', $.optional_chain)),
+        '[', field('index', $._expressions), ']',
+      )),
+
+      update_expression: $ => prec.left(choice(
+        seq(field('argument', $._postfix_operand), field('operator', choice('++', '--'))),
+        seq(field('operator', choice('++', '--')), field('argument', $.expression)),
+      )),
+
       call_expression: $ => choice(
         prec('call', seq(
-          field('function', choice($.expression, $.import)),
+          field('function', choice($._postfix_operand, $.import)),
           field('type_arguments', optional($.type_arguments)),
           field('arguments', $.arguments),
         )),
@@ -338,7 +389,7 @@ module.exports = function defineGrammar(dialect) {
       ),
 
       non_null_expression: $ => prec.left('unary', seq(
-        $.expression, '!',
+        $._postfix_operand, '!',
       )),
 
       variable_declarator: $ => choice(
@@ -503,8 +554,9 @@ module.exports = function defineGrammar(dialect) {
       )),
 
       instantiation_expression: $ => prec('instantiation', seq(
-        $.expression,
+        $._postfix_operand,
         field('type_arguments', $.type_arguments),
+        $._instantiation_expression_end,
       )),
 
       class_heritage: $ => choice(
