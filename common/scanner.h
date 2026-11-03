@@ -1,6 +1,7 @@
 #include "tree_sitter/parser.h"
 
 #include <wctype.h>
+#include <string.h>
 
 enum TokenType {
     AUTOMATIC_SEMICOLON,
@@ -13,11 +14,103 @@ enum TokenType {
     JSX_TEXT,
     FUNCTION_SIGNATURE_AUTOMATIC_SEMICOLON,
     ERROR_RECOVERY,
+    INSTANTIATION_EXPRESSION_END,
 };
 
 static void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
 static void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
+
+static bool is_js_line_break(int32_t c) {
+    return c == '\r' || c == '\n' || c == 0x2028 || c == 0x2029;
+}
+
+static bool is_js_space(int32_t c) {
+    return is_js_line_break(c) || c == ' ' || c == '\t' || c == '\v' || c == '\f' ||
+           c == 0xa0 || c == 0x1680 || (c >= 0x2000 && c <= 0x200a) ||
+           c == 0x202f || c == 0x205f || c == 0x3000 || c == 0xfeff;
+}
+
+// TypeScript's canFollowTypeArgumentsInExpression distinguishes instantiations
+// from comparisons using the following token and intervening line breaks.
+static bool scan_instantiation_end(TSLexer *lexer) {
+    lexer->result_symbol = INSTANTIATION_EXPRESSION_END;
+    lexer->mark_end(lexer);
+    bool line_break = false;
+    for (;;) {
+        while (is_js_space(lexer->lookahead)) {
+            line_break |= is_js_line_break(lexer->lookahead);
+            advance(lexer);
+        }
+        if (lexer->lookahead != '/') break;
+        advance(lexer);
+        if (lexer->lookahead == '/') {
+            while (lexer->lookahead && !is_js_line_break(lexer->lookahead)) advance(lexer);
+        } else if (lexer->lookahead == '*') {
+            advance(lexer);
+            bool closed = false;
+            while (lexer->lookahead) {
+                line_break |= is_js_line_break(lexer->lookahead);
+                if (lexer->lookahead == '*') {
+                    advance(lexer);
+                    if (lexer->lookahead == '/') {
+                        advance(lexer);
+                        closed = true;
+                        break;
+                    }
+                } else {
+                    advance(lexer);
+                }
+            }
+            if (!closed) return false;
+        } else {
+            return true; // Division, including /=, can follow an instantiation.
+        }
+    }
+
+    int32_t c = lexer->lookahead;
+    // Arguments and tagged templates belong to call_expression, which has its
+    // own type_arguments field, rather than a call of an instantiation node.
+    if (c == '(' || c == '`') return false;
+    if (c == '+' || c == '-') {
+        advance(lexer);
+        return lexer->lookahead == '=' || (lexer->lookahead == c && line_break);
+    }
+    if (c == '<') {
+        advance(lexer);
+        return lexer->lookahead == '<' || lexer->lookahead == '=';
+    }
+    if (c == '>') return false;
+    if (line_break) return true;
+    if (c == '!') {
+        advance(lexer);
+        return lexer->lookahead == '=';
+    }
+    if (c == '[' || c == '{' || c == '~' || c == '\'' || c == '"' || c == '\\' ||
+        c == '@' || c == '#' || (c >= '0' && c <= '9')) return false;
+    if (c == '.') {
+        advance(lexer);
+        return lexer->lookahead < '0' || lexer->lookahead > '9';
+    }
+    if (iswalpha(c) || c == '$' || c == '_' || c >= 0x80) {
+        char word[12];
+        unsigned length = 0;
+        bool ascii = true;
+        do {
+            ascii &= lexer->lookahead < 0x80;
+            if (length < sizeof(word) - 1) word[length] = (char)lexer->lookahead;
+            length++;
+            advance(lexer);
+        } while (iswalnum(lexer->lookahead) || lexer->lookahead == '$' ||
+                 lexer->lookahead == '_' ||
+                 (lexer->lookahead >= 0x80 && !is_js_space(lexer->lookahead)));
+        if (!ascii || length >= sizeof(word) || lexer->lookahead == '\\') return false;
+        word[length] = '\0';
+        return strcmp(word, "in") == 0 || strcmp(word, "instanceof") == 0 ||
+               strcmp(word, "as") == 0 || strcmp(word, "satisfies") == 0;
+    }
+    return true;
+}
 
 static bool scan_template_chars(TSLexer *lexer) {
     lexer->result_symbol = TEMPLATE_CHARS;
@@ -315,6 +408,9 @@ static bool scan_jsx_text(TSLexer *lexer) {
 }
 
 static inline bool external_scanner_scan(void *payload, TSLexer *lexer, const bool *valid_symbols) {
+    if (valid_symbols[INSTANTIATION_EXPRESSION_END] && !valid_symbols[ERROR_RECOVERY]) {
+        return scan_instantiation_end(lexer);
+    }
     if (valid_symbols[TEMPLATE_CHARS]) {
         if (valid_symbols[AUTOMATIC_SEMICOLON]) {
             return false;

@@ -1054,7 +1054,19 @@
       "required": true,
       "types": [
         {
+          "type": "call_expression",
+          "named": true
+        },
+        {
           "type": "expression",
+          "named": true
+        },
+        {
+          "type": "member_expression",
+          "named": true
+        },
+        {
+          "type": "subscript_expression",
           "named": true
         }
       ]

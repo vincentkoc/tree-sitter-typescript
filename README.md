@@ -11,7 +11,7 @@ TypeScript and TSX grammars for [tree-sitter][].
 
 ## Python source fork
 
-This fork supplies `tree-sitter-typescript==0.23.2+vk.1` to
+This fork supplies `tree-sitter-typescript==0.23.2+vk.2` to
 [scb-check](https://github.com/vincentkoc/scb-check) through an exact Git revision.
 It is not a registry release. Installing from Git builds the checked-in C parsers
 and requires a C compiler and Python development headers; Node.js is needed only
@@ -25,10 +25,24 @@ by Nicolas Marchildon (following Herrington Darkholme's earlier work), and
 `typeof import()` call precedence from
 [PR #375](https://github.com/tree-sitter/tree-sitter-typescript/pull/375)
 by Donald Wasserman. It extends import types to array, indexed and parenthesized
-forms and tests expression/type ambiguity. The upstream AST ownership bug for
-`await load<T>()` and chained variants remains visible as two expected-failure
-Python regressions. Parse success does not imply full TypeScript AST correctness;
-this fork changes syntax coverage, not application source.
+forms and tests expression/type ambiguity. It also fixes the
+[generic-await ownership bug](https://github.com/tree-sitter/tree-sitter-typescript/issues/282)
+for calls and postfix chains, preserving comparisons, constructors and explicit
+parentheses. A scanner guard distinguishes instantiations from comparisons using
+the following token and intervening line breaks.
+
+Python regressions compare expression kinds and UTF-8 byte ranges against
+TypeScript 6.0.3 in async function bodies. The checked-in reference data needs no
+TypeScript installation during tests. To regenerate it, pass an installed 6.0.3
+package directory to `node bindings/python/tests/await_oracle.cjs /path/to/typescript`.
+The compiler source and version are recorded in the fixture.
+
+Known gaps remain explicit: unary generic calls, generic tagged templates,
+await casts involving non-null assertions or bare instantiations, newline updates
+after instantiations, and malformed
+combined shift assignments. Their reference cases are expected failures, not
+passing coverage. Parse success does not imply full TypeScript AST correctness;
+this fork changes the parser, not application source.
 
 Generated sources use `tree-sitter-cli@0.24.4`,
 `tree-sitter-javascript@0.23.1`, and `tree-sitter generate --abi 14` from each

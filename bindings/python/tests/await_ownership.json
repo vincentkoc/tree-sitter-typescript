@@ -1,0 +1,2148 @@
+{
+  "reference": {
+    "package": "typescript",
+    "version": "6.0.3",
+    "source": "https://github.com/microsoft/TypeScript/blob/v6.0.3/src/compiler/parser.ts",
+    "prefix": "async function task(){const value = ",
+    "suffix": ";}"
+  },
+  "cases": [
+    {
+      "expression": "await f()",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          9
+        ],
+        [
+          "call_expression",
+          6,
+          9
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>()",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          12
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>()()",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          14
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ],
+        [
+          "call_expression",
+          6,
+          14
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>().value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          18
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ],
+        [
+          "member_expression",
+          6,
+          18
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>()[index]",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          19
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ],
+        [
+          "subscript_expression",
+          6,
+          19
+        ]
+      ]
+    },
+    {
+      "expression": "await f!<T>()",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          13
+        ],
+        [
+          "call_expression",
+          6,
+          13
+        ],
+        [
+          "non_null_expression",
+          6,
+          8
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>()!",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          13
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ],
+        [
+          "non_null_expression",
+          6,
+          13
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>().value++",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          20
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ],
+        [
+          "member_expression",
+          6,
+          18
+        ],
+        [
+          "update_expression",
+          6,
+          20
+        ]
+      ]
+    },
+    {
+      "expression": "await object.value++",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          20
+        ],
+        [
+          "member_expression",
+          6,
+          18
+        ],
+        [
+          "update_expression",
+          6,
+          20
+        ]
+      ]
+    },
+    {
+      "expression": "await ++object.value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          20
+        ],
+        [
+          "member_expression",
+          8,
+          20
+        ],
+        [
+          "update_expression",
+          6,
+          20
+        ]
+      ]
+    },
+    {
+      "expression": "await f().value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          15
+        ],
+        [
+          "call_expression",
+          6,
+          9
+        ],
+        [
+          "member_expression",
+          6,
+          15
+        ]
+      ]
+    },
+    {
+      "expression": "await f()[index]",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          16
+        ],
+        [
+          "call_expression",
+          6,
+          9
+        ],
+        [
+          "subscript_expression",
+          6,
+          16
+        ]
+      ]
+    },
+    {
+      "expression": "await f?.<T>()",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          14
+        ],
+        [
+          "call_expression",
+          6,
+          14
+        ]
+      ]
+    },
+    {
+      "expression": "await obj?.method<T>()",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          22
+        ],
+        [
+          "call_expression",
+          6,
+          22
+        ],
+        [
+          "member_expression",
+          6,
+          17
+        ]
+      ]
+    },
+    {
+      "expression": "await new Factory<T>()",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          22
+        ],
+        [
+          "new_expression",
+          6,
+          22
+        ]
+      ]
+    },
+    {
+      "expression": "await new Factory<T>()()",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          24
+        ],
+        [
+          "call_expression",
+          6,
+          24
+        ],
+        [
+          "new_expression",
+          6,
+          22
+        ]
+      ]
+    },
+    {
+      "expression": "(await f)<T>()",
+      "shapes": [
+        [
+          "await_expression",
+          1,
+          8
+        ],
+        [
+          "call_expression",
+          0,
+          14
+        ],
+        [
+          "parenthesized_expression",
+          0,
+          9
+        ]
+      ]
+    },
+    {
+      "expression": "(await f<T>()).value",
+      "shapes": [
+        [
+          "await_expression",
+          1,
+          13
+        ],
+        [
+          "call_expression",
+          7,
+          13
+        ],
+        [
+          "member_expression",
+          0,
+          20
+        ],
+        [
+          "parenthesized_expression",
+          0,
+          14
+        ]
+      ]
+    },
+    {
+      "expression": "left < typeof right",
+      "shapes": [
+        [
+          "binary_expression",
+          0,
+          19
+        ],
+        [
+          "unary_expression",
+          7,
+          19
+        ]
+      ]
+    },
+    {
+      "expression": "left < right > other",
+      "shapes": [
+        [
+          "binary_expression",
+          0,
+          12
+        ],
+        [
+          "binary_expression",
+          0,
+          20
+        ]
+      ]
+    },
+    {
+      "expression": "left < await right",
+      "shapes": [
+        [
+          "await_expression",
+          7,
+          18
+        ],
+        [
+          "binary_expression",
+          0,
+          18
+        ]
+      ]
+    },
+    {
+      "expression": "left < ++right",
+      "shapes": [
+        [
+          "binary_expression",
+          0,
+          14
+        ],
+        [
+          "update_expression",
+          7,
+          14
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>() + value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          12
+        ],
+        [
+          "binary_expression",
+          0,
+          20
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ]
+      ]
+    },
+    {
+      "expression": "await f < value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          15
+        ]
+      ]
+    },
+    {
+      "expression": "await f < T > value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          11
+        ],
+        [
+          "binary_expression",
+          0,
+          19
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>() < value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          12
+        ],
+        [
+          "binary_expression",
+          0,
+          20
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ]
+      ]
+    },
+    {
+      "expression": "await f + value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          15
+        ]
+      ]
+    },
+    {
+      "expression": "await f > value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          15
+        ]
+      ]
+    },
+    {
+      "expression": "await f <= value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          16
+        ]
+      ]
+    },
+    {
+      "expression": "await f >= value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          16
+        ]
+      ]
+    },
+    {
+      "expression": "await f in value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          16
+        ]
+      ]
+    },
+    {
+      "expression": "await f instanceof Value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          24
+        ]
+      ]
+    },
+    {
+      "expression": "await f ?? value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          16
+        ]
+      ]
+    },
+    {
+      "expression": "await f && value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          16
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>() as Callable",
+      "shapes": [
+        [
+          "as_expression",
+          0,
+          24
+        ],
+        [
+          "await_expression",
+          0,
+          12
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>() satisfies Callable",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          12
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ],
+        [
+          "satisfies_expression",
+          0,
+          31
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>() ? yes : no",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          12
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ],
+        [
+          "ternary_expression",
+          0,
+          23
+        ]
+      ]
+    },
+    {
+      "expression": "await f.foo<T>()?.bar!()[index]<U>().value++",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          44
+        ],
+        [
+          "call_expression",
+          6,
+          16
+        ],
+        [
+          "call_expression",
+          6,
+          24
+        ],
+        [
+          "call_expression",
+          6,
+          36
+        ],
+        [
+          "member_expression",
+          6,
+          11
+        ],
+        [
+          "member_expression",
+          6,
+          21
+        ],
+        [
+          "member_expression",
+          6,
+          42
+        ],
+        [
+          "non_null_expression",
+          6,
+          22
+        ],
+        [
+          "subscript_expression",
+          6,
+          31
+        ],
+        [
+          "update_expression",
+          6,
+          44
+        ]
+      ]
+    },
+    {
+      "expression": "await (await f<T>()).value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          26
+        ],
+        [
+          "await_expression",
+          7,
+          19
+        ],
+        [
+          "call_expression",
+          13,
+          19
+        ],
+        [
+          "member_expression",
+          6,
+          26
+        ],
+        [
+          "parenthesized_expression",
+          6,
+          20
+        ]
+      ]
+    },
+    {
+      "expression": "await await f<T>()",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          18
+        ],
+        [
+          "await_expression",
+          6,
+          18
+        ],
+        [
+          "call_expression",
+          12,
+          18
+        ]
+      ]
+    },
+    {
+      "expression": "await object.method!<T>(arg).then(done)",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          39
+        ],
+        [
+          "call_expression",
+          6,
+          28
+        ],
+        [
+          "call_expression",
+          6,
+          39
+        ],
+        [
+          "member_expression",
+          6,
+          19
+        ],
+        [
+          "member_expression",
+          6,
+          33
+        ],
+        [
+          "non_null_expression",
+          6,
+          20
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> + value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          18
+        ],
+        [
+          "unary_expression",
+          11,
+          18
+        ]
+      ]
+    },
+    {
+      "expression": "new (await factory)<T>()",
+      "shapes": [
+        [
+          "await_expression",
+          5,
+          18
+        ],
+        [
+          "new_expression",
+          0,
+          24
+        ],
+        [
+          "parenthesized_expression",
+          4,
+          19
+        ]
+      ]
+    },
+    {
+      "expression": "void await f<T>()",
+      "shapes": [
+        [
+          "await_expression",
+          5,
+          17
+        ],
+        [
+          "call_expression",
+          11,
+          17
+        ],
+        [
+          "unary_expression",
+          0,
+          17
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>(await g<U>()).value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          30
+        ],
+        [
+          "await_expression",
+          11,
+          23
+        ],
+        [
+          "call_expression",
+          6,
+          24
+        ],
+        [
+          "call_expression",
+          17,
+          23
+        ],
+        [
+          "member_expression",
+          6,
+          30
+        ]
+      ]
+    },
+    {
+      "expression": "left < await f<T>()",
+      "shapes": [
+        [
+          "await_expression",
+          7,
+          19
+        ],
+        [
+          "binary_expression",
+          0,
+          19
+        ],
+        [
+          "call_expression",
+          13,
+          19
+        ]
+      ]
+    },
+    {
+      "expression": "(await f<T>())[index]",
+      "shapes": [
+        [
+          "await_expression",
+          1,
+          13
+        ],
+        [
+          "call_expression",
+          7,
+          13
+        ],
+        [
+          "parenthesized_expression",
+          0,
+          14
+        ],
+        [
+          "subscript_expression",
+          0,
+          21
+        ]
+      ]
+    },
+    {
+      "expression": "await await f<T>().m<U>()[k]",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          28
+        ],
+        [
+          "await_expression",
+          6,
+          28
+        ],
+        [
+          "call_expression",
+          12,
+          18
+        ],
+        [
+          "call_expression",
+          12,
+          25
+        ],
+        [
+          "member_expression",
+          12,
+          20
+        ],
+        [
+          "subscript_expression",
+          12,
+          28
+        ]
+      ]
+    },
+    {
+      "expression": "(await f<T>()).m<U>()[k]",
+      "shapes": [
+        [
+          "await_expression",
+          1,
+          13
+        ],
+        [
+          "call_expression",
+          0,
+          21
+        ],
+        [
+          "call_expression",
+          7,
+          13
+        ],
+        [
+          "member_expression",
+          0,
+          16
+        ],
+        [
+          "parenthesized_expression",
+          0,
+          14
+        ],
+        [
+          "subscript_expression",
+          0,
+          24
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>(await g<U>()).m<V>()",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          31
+        ],
+        [
+          "await_expression",
+          11,
+          23
+        ],
+        [
+          "call_expression",
+          6,
+          24
+        ],
+        [
+          "call_expression",
+          6,
+          31
+        ],
+        [
+          "call_expression",
+          17,
+          23
+        ],
+        [
+          "member_expression",
+          6,
+          26
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>().value as R",
+      "shapes": [
+        [
+          "as_expression",
+          0,
+          23
+        ],
+        [
+          "await_expression",
+          0,
+          18
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ],
+        [
+          "member_expression",
+          6,
+          18
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>().value satisfies R",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          18
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ],
+        [
+          "member_expression",
+          6,
+          18
+        ],
+        [
+          "satisfies_expression",
+          0,
+          30
+        ]
+      ]
+    },
+    {
+      "expression": "await new F<T>(await g<U>())",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          28
+        ],
+        [
+          "await_expression",
+          15,
+          27
+        ],
+        [
+          "call_expression",
+          21,
+          27
+        ],
+        [
+          "new_expression",
+          6,
+          28
+        ]
+      ]
+    },
+    {
+      "expression": "await obj?.m<T>()?.[k]",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          22
+        ],
+        [
+          "call_expression",
+          6,
+          17
+        ],
+        [
+          "member_expression",
+          6,
+          12
+        ],
+        [
+          "subscript_expression",
+          6,
+          22
+        ]
+      ]
+    },
+    {
+      "expression": "await f < value && ok",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          15
+        ],
+        [
+          "binary_expression",
+          0,
+          21
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>(arg)",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          15
+        ],
+        [
+          "call_expression",
+          6,
+          15
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>(arg).value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          21
+        ],
+        [
+          "call_expression",
+          6,
+          15
+        ],
+        [
+          "member_expression",
+          6,
+          21
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> - value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          18
+        ],
+        [
+          "unary_expression",
+          11,
+          18
+        ]
+      ]
+    },
+    {
+      "expression": "(await f<T>()) + value",
+      "shapes": [
+        [
+          "await_expression",
+          1,
+          13
+        ],
+        [
+          "binary_expression",
+          0,
+          22
+        ],
+        [
+          "call_expression",
+          7,
+          13
+        ],
+        [
+          "parenthesized_expression",
+          0,
+          14
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>() /* comment */ + value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          12
+        ],
+        [
+          "binary_expression",
+          0,
+          34
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> /* comment */ + value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          32
+        ],
+        [
+          "unary_expression",
+          25,
+          32
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>\n+ value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          18
+        ],
+        [
+          "unary_expression",
+          11,
+          18
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> /* comment */ - value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          32
+        ],
+        [
+          "unary_expression",
+          25,
+          32
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> / value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          18
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> * value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          18
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> <= value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          19
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> << value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          19
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>+x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          12
+        ],
+        [
+          "unary_expression",
+          10,
+          12
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>-x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          12
+        ],
+        [
+          "unary_expression",
+          10,
+          12
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>++x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          13
+        ],
+        [
+          "update_expression",
+          10,
+          13
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>--x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          13
+        ],
+        [
+          "update_expression",
+          10,
+          13
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T><<x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          13
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T><=x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          13
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>>x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          12
+        ],
+        [
+          "binary_expression",
+          8,
+          12
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>>>x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          13
+        ],
+        [
+          "binary_expression",
+          8,
+          13
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>/*c*/+x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          17
+        ],
+        [
+          "unary_expression",
+          15,
+          17
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>+/**/+x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          17
+        ],
+        [
+          "unary_expression",
+          10,
+          17
+        ],
+        [
+          "unary_expression",
+          15,
+          17
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>\n+x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          13
+        ],
+        [
+          "unary_expression",
+          11,
+          13
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>﻿+x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          15
+        ],
+        [
+          "unary_expression",
+          13,
+          15
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>!=x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          13
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>!==x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          14
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>/x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          12
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>*x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          12
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          11
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>[x]",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          13
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T>\"x\"",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          13
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> in obj",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          19
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> /* comment */ / value",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "binary_expression",
+          0,
+          32
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    },
+    {
+      "expression": "f<T> as R",
+      "shapes": [
+        [
+          "as_expression",
+          0,
+          10
+        ],
+        [
+          "instantiation_expression",
+          0,
+          4
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> as\\u0078",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          19
+        ]
+      ]
+    },
+    {
+      "expression": "await f<T> in\\u0074",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          7
+        ],
+        [
+          "binary_expression",
+          0,
+          9
+        ],
+        [
+          "binary_expression",
+          0,
+          19
+        ]
+      ]
+    }
+  ],
+  "known_gaps": {
+    "unary_generic_call": {
+      "expression": "await !f<T>()",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          13
+        ],
+        [
+          "call_expression",
+          7,
+          13
+        ],
+        [
+          "unary_expression",
+          6,
+          13
+        ]
+      ]
+    },
+    "generic_tagged_template": {
+      "expression": "await f<T>`template`",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          20
+        ],
+        [
+          "call_expression",
+          6,
+          20
+        ]
+      ]
+    },
+    "non_null_cast": {
+      "expression": "await f<T>()! as R",
+      "shapes": [
+        [
+          "as_expression",
+          0,
+          18
+        ],
+        [
+          "await_expression",
+          0,
+          13
+        ],
+        [
+          "call_expression",
+          6,
+          12
+        ],
+        [
+          "non_null_expression",
+          6,
+          13
+        ]
+      ]
+    },
+    "instantiation_lf_update": {
+      "expression": "await f<T>\n++x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ],
+        [
+          "update_expression",
+          11,
+          14
+        ]
+      ]
+    },
+    "instantiation_comment_update": {
+      "expression": "await f<T>/* */++x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ],
+        [
+          "update_expression",
+          17,
+          20
+        ]
+      ]
+    },
+    "instantiation_cr_update": {
+      "expression": "await f<T>\r++x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ],
+        [
+          "update_expression",
+          11,
+          14
+        ]
+      ]
+    },
+    "instantiation_ps_update": {
+      "expression": "await f<T> ++x",
+      "shapes": [
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ],
+        [
+          "update_expression",
+          13,
+          16
+        ]
+      ]
+    },
+    "instantiation_cast": {
+      "expression": "await f<T> as R",
+      "shapes": [
+        [
+          "as_expression",
+          0,
+          16
+        ],
+        [
+          "await_expression",
+          0,
+          10
+        ],
+        [
+          "instantiation_expression",
+          6,
+          10
+        ]
+      ]
+    }
+  },
+  "invalid_cases": [
+    "await f<T> < value",
+    "await f<T> > value",
+    "await f<T> >= value",
+    "await f<T>(",
+    "await f<T> /* unterminated"
+  ],
+  "known_invalid_cases": [
+    "await f<T>>=x"
+  ]
+}
