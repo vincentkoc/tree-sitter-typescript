@@ -9,6 +9,34 @@
 
 TypeScript and TSX grammars for [tree-sitter][].
 
+## Python source fork
+
+This fork supplies `tree-sitter-typescript==0.23.2+vk.1` to
+[scb-check](https://github.com/vincentkoc/scb-check) through an exact Git revision.
+It is not a registry release. Installing from Git builds the checked-in C parsers
+and requires a C compiler and Python development headers; Node.js is needed only
+to regenerate them. Both grammars retain Tree-sitter ABI 14.
+
+The fork backports type-only wildcard exports from
+[PR #358](https://github.com/tree-sitter/tree-sitter-typescript/pull/358)
+by Gunnlaugur Thor Briem, import member type arguments from
+[PR #365](https://github.com/tree-sitter/tree-sitter-typescript/pull/365)
+by Nicolas Marchildon (following Herrington Darkholme's earlier work), and
+`typeof import()` call precedence from
+[PR #375](https://github.com/tree-sitter/tree-sitter-typescript/pull/375)
+by Donald Wasserman. It extends import types to array, indexed and parenthesized
+forms and tests expression/type ambiguity. The upstream AST ownership bug for
+`await load<T>()` and chained variants remains visible as two expected-failure
+Python regressions. Parse success does not imply full TypeScript AST correctness;
+this fork changes syntax coverage, not application source.
+
+Generated sources use `tree-sitter-cli@0.24.4`,
+`tree-sitter-javascript@0.23.1`, and `tree-sitter generate --abi 14` from each
+of `typescript/` and `tsx/`. CI verifies generation is reproducible and runs
+the native corpus and Python binding regressions. The upstream MIT license
+and author metadata remain intact.
+
+
 Because TSX and TypeScript are actually two different dialects, this module defines two grammars. Require them as follows:
 
 ```js
