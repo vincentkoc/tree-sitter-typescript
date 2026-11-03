@@ -1,0 +1,75 @@
+========================================
+Type-only wildcard exports (typescript)
+:language(typescript)
+========================================
+
+export type * from "./types";
+export type * as Types from "./types";
+
+---
+
+(program (export_statement (string (string_fragment))) (export_statement (namespace_export (identifier)) (string (string_fragment))))
+
+========================================
+Import type suffixes (typescript)
+:language(typescript)
+========================================
+
+let entries: import("node:fs").Dirent[];
+type Values = import("./types").Result<string>[][];
+type Value = import("./types").Result["value"];
+type Results = (import("./types").Result)[];
+
+---
+
+(program (lexical_declaration (variable_declarator (identifier) (type_annotation (array_type (member_expression (call_expression (import) (arguments (string (string_fragment)))) (property_identifier)))))) (type_alias_declaration (type_identifier) (array_type (array_type (member_expression (call_expression (import) (arguments (string (string_fragment)))) (property_identifier) (type_arguments (predefined_type)))))) (type_alias_declaration (type_identifier) (lookup_type (member_expression (call_expression (import) (arguments (string (string_fragment)))) (property_identifier)) (literal_type (string (string_fragment))))) (type_alias_declaration (type_identifier) (array_type (parenthesized_type (member_expression (call_expression (import) (arguments (string (string_fragment)))) (property_identifier))))))
+
+========================================
+Typeof import generic calls (typescript)
+:language(typescript)
+========================================
+
+const actual = load<typeof import("./module")>();
+const actual = vi.importActual<typeof import("./module")>("./module",);
+
+---
+
+(program (lexical_declaration (variable_declarator (identifier) (call_expression (identifier) (type_arguments (type_query (call_expression (import) (arguments (string (string_fragment)))))) (arguments)))) (lexical_declaration (variable_declarator (identifier) (call_expression (member_expression (identifier) (property_identifier)) (type_arguments (type_query (call_expression (import) (arguments (string (string_fragment)))))) (arguments (string (string_fragment)))))))
+
+========================================
+Type-only wildcard exports (tsx)
+:language(tsx)
+========================================
+
+export type * from "./types";
+export type * as Types from "./types";
+
+---
+
+(program (export_statement (string (string_fragment))) (export_statement (namespace_export (identifier)) (string (string_fragment))))
+
+========================================
+Import type suffixes (tsx)
+:language(tsx)
+========================================
+
+let entries: import("node:fs").Dirent[];
+type Values = import("./types").Result<string>[][];
+type Value = import("./types").Result["value"];
+type Results = (import("./types").Result)[];
+
+---
+
+(program (lexical_declaration (variable_declarator (identifier) (type_annotation (array_type (member_expression (call_expression (import) (arguments (string (string_fragment)))) (property_identifier)))))) (type_alias_declaration (type_identifier) (array_type (array_type (member_expression (call_expression (import) (arguments (string (string_fragment)))) (property_identifier) (type_arguments (predefined_type)))))) (type_alias_declaration (type_identifier) (lookup_type (member_expression (call_expression (import) (arguments (string (string_fragment)))) (property_identifier)) (literal_type (string (string_fragment))))) (type_alias_declaration (type_identifier) (array_type (parenthesized_type (member_expression (call_expression (import) (arguments (string (string_fragment)))) (property_identifier))))))
+
+========================================
+Typeof import generic calls (tsx)
+:language(tsx)
+========================================
+
+const actual = load<typeof import("./module")>();
+const actual = vi.importActual<typeof import("./module")>("./module",);
+
+---
+
+(program (lexical_declaration (variable_declarator (identifier) (call_expression (identifier) (type_arguments (type_query (call_expression (import) (arguments (string (string_fragment)))))) (arguments)))) (lexical_declaration (variable_declarator (identifier) (call_expression (member_expression (identifier) (property_identifier)) (type_arguments (type_query (call_expression (import) (arguments (string (string_fragment)))))) (arguments (string (string_fragment)))))))

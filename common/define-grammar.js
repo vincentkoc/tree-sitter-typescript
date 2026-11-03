@@ -16,6 +16,7 @@ module.exports = function defineGrammar(dialect) {
 
     precedences: ($, previous) => previous.concat([
       [
+        'type_query_call',
         'call',
         'instantiation',
         'unary',
@@ -52,7 +53,6 @@ module.exports = function defineGrammar(dialect) {
       [$.nested_type_identifier, $.generic_type, $.primary_type, $.lookup_type, $.index_type_query, $.type],
       [$.as_expression, $.satisfies_expression, $.primary_type],
       [$._type_query_member_expression, $.member_expression],
-      [$.member_expression, $._type_query_member_expression_in_type_annotation],
       [$._type_query_member_expression, $.primary_expression],
       [$._type_query_subscript_expression, $.subscript_expression],
       [$._type_query_subscript_expression, $.primary_expression],
@@ -64,7 +64,6 @@ module.exports = function defineGrammar(dialect) {
       [$.literal_type, $.pattern],
       [$.predefined_type, $.pattern],
       [$.call_expression, $._type_query_call_expression],
-      [$.call_expression, $._type_query_call_expression_in_type_annotation],
       [$.new_expression, $.primary_expression],
       [$.meta_property, $.primary_expression],
       [$.construct_signature, $._property_name],
@@ -78,6 +77,11 @@ module.exports = function defineGrammar(dialect) {
 
       // This appears to be necessary to parse a parenthesized class expression
       [$.class],
+      [$._type_query_member_expression_in_type_annotation],
+      [$.call_expression, $._type_query_call_expression_in_type_annotation],
+      [$.member_expression, $._type_query_member_expression_in_type_annotation],
+      [$._type_query_call_expression_in_type_annotation, $.primary_type],
+      [$._type_query_member_expression_in_type_annotation, $.primary_type],
 
       [$.nested_identifier, $.nested_type_identifier, $.primary_expression],
       [$.nested_identifier, $.nested_type_identifier],
@@ -322,8 +326,11 @@ module.exports = function defineGrammar(dialect) {
         seq(
           'export',
           'type',
-          $.export_clause,
-          optional($._from_clause),
+          choice(
+            seq('*', $._from_clause),
+            seq($.namespace_export, $._from_clause),
+            seq($.export_clause, optional($._from_clause)),
+          ),
           $._semicolon,
         ),
         seq('export', '=', $.expression, $._semicolon),
@@ -702,6 +709,7 @@ module.exports = function defineGrammar(dialect) {
           $.private_property_identifier,
           alias($.identifier, $.property_identifier),
         )),
+        optional($.type_arguments),
       ),
       _type_query_call_expression_in_type_annotation: $ => seq(
         field('function', choice(
@@ -726,8 +734,6 @@ module.exports = function defineGrammar(dialect) {
         $.readonly_type,
         $.constructor_type,
         $.infer_type,
-        prec(-1, alias($._type_query_member_expression_in_type_annotation, $.member_expression)),
-        prec(-1, alias($._type_query_call_expression_in_type_annotation, $.call_expression)),
       ),
 
       tuple_parameter: $ => seq(
@@ -762,6 +768,8 @@ module.exports = function defineGrammar(dialect) {
       )),
 
       primary_type: $ => choice(
+        alias($._type_query_member_expression_in_type_annotation, $.member_expression),
+        alias($._type_query_call_expression_in_type_annotation, $.call_expression),
         $.parenthesized_type,
         $.predefined_type,
         $._type_identifier,
@@ -867,7 +875,7 @@ module.exports = function defineGrammar(dialect) {
         optional('?.'),
         '[', field('index', choice($.predefined_type, $.string, $.number)), ']',
       ),
-      _type_query_call_expression: $ => seq(
+      _type_query_call_expression: $ => prec('type_query_call', seq(
         field('function', choice(
           $.import,
           $.identifier,
@@ -875,7 +883,7 @@ module.exports = function defineGrammar(dialect) {
           alias($._type_query_subscript_expression, $.subscript_expression),
         )),
         field('arguments', $.arguments),
-      ),
+      )),
       _type_query_instantiation_expression: $ => seq(
         field('function', choice(
           $.import,
@@ -1103,8 +1111,7 @@ module.exports = function defineGrammar(dialect) {
  *
  * @param {RuleOrLiteral} rule
  *
- * @return {SeqRule}
- *
+ * @returns {SeqRule}
  */
 function commaSep1(rule) {
   return sepBy1(',', rule);
@@ -1115,8 +1122,7 @@ function commaSep1(rule) {
  *
  * @param {RuleOrLiteral} rule
  *
- * @return {SeqRule}
- *
+ * @returns {SeqRule}
  */
 function commaSep(rule) {
   return sepBy(',', rule);
@@ -1129,7 +1135,7 @@ function commaSep(rule) {
  *
  * @param {RuleOrLiteral} rule
  *
- * @return {ChoiceRule}
+ * @returns {ChoiceRule}
  */
 function sepBy(sep, rule) {
   return optional(sepBy1(sep, rule));
@@ -1142,7 +1148,7 @@ function sepBy(sep, rule) {
  *
  * @param {RuleOrLiteral} rule
  *
- * @return {SeqRule}
+ * @returns {SeqRule}
  */
 function sepBy1(sep, rule) {
   return seq(rule, repeat(seq(sep, rule)));
